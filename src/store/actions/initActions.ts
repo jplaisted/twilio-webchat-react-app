@@ -45,6 +45,18 @@ export function initSession({ token, conversationSid }: { token: string; convers
             throw e;
         }
 
+        Object.assign(window, {
+            theconvo: {
+                conversation
+            }
+        });
+
+        console.log(conversation);
+
+        const cs = conversation.state?.current || (conversation as any).channelState?.attributes?.status?.toLowerCase();
+
+        console.log(cs);
+
         dispatch({
             type: ACTION_START_SESSION,
             payload: {
@@ -55,7 +67,8 @@ export function initSession({ token, conversationSid }: { token: string; convers
                 users,
                 participants,
                 messages,
-                conversationState: conversation.state?.current,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                conversationState: cs,
                 currentPhase: EngagementPhase.MessagingCanvas
             }
         });
