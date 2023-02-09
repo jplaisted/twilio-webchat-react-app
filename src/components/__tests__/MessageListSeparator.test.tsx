@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { Message } from "@twilio/conversations";
+import { Message } from "twilio-chat";
 
 import { MessageListSeparator } from "../MessageListSeparator";
 

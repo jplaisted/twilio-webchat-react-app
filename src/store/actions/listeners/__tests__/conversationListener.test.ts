@@ -1,4 +1,4 @@
-import { Conversation } from "../../../../__mocks__/@twilio/conversations/conversation";
+import { Channel as Conversation } from "../../../../__mocks__/twilio-chat/channel";
 import { initConversationListener } from "../conversationListener";
 
 describe("initConversationListener", () => {

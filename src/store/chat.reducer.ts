@@ -1,5 +1,5 @@
 import { AnyAction, Reducer } from "redux";
-import { Message, Participant } from "@twilio/conversations";
+import { Message, Member } from "twilio-chat";
 
 import { ChatState } from "./definitions";
 import {
@@ -107,7 +107,7 @@ export const ChatReducer: Reducer = (state: ChatState = initialState, action: An
             return {
                 ...state,
                 participants: [
-                    ...(state.participants || []).reduce((acc: Participant[], p) => {
+                    ...(state.participants || []).reduce((acc: Member[], p) => {
                         if (p.sid === action.payload.participant.sid) {
                             acc.push(action.payload.participant);
                         } else {

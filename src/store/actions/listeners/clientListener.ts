@@ -1,4 +1,4 @@
-import { Client } from "@twilio/conversations";
+import { Client } from "twilio-chat";
 import { Dispatch } from "redux";
 import log from "loglevel";
 

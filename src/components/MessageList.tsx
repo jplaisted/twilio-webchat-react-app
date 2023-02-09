@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Box } from "@twilio-paste/core/box";
 import { Text } from "@twilio-paste/core/text";
 import { Spinner } from "@twilio-paste/core/spinner";
-import { Message } from "@twilio/conversations";
+import { Message } from "twilio-chat";
 import throttle from "lodash.throttle";
 
 import { MessageBubble } from "./MessageBubble";
@@ -138,7 +138,7 @@ export const MessageList = () => {
 
     const renderSeparatorIfApplicable = (message: Message, i: number) => {
         const belongsToCurrentUser = message.author === conversationsClient?.user.identity;
-        const isFirstUnreadMessage = message.index === (conversation?.lastReadMessageIndex as number) + 1;
+        const isFirstUnreadMessage = message.index === (conversation?.lastConsumedMessageIndex as number) + 1;
 
         /*
          * Render date separator above the first message which is the first of a certain date

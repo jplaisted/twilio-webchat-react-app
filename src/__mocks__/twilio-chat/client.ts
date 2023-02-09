@@ -1,10 +1,10 @@
-import type { ClientOptions, Client as ClientType, ConnectionState, User as UserType } from "@twilio/conversations";
+import type { ClientOptions, Client as ClientType, ConnectionState, User as UserType } from "twilio-chat";
 
-import { Conversation } from "./conversation";
-import { MockedPaginator } from "../../../test-utils";
+import { Channel } from "./channel";
+import { MockedPaginator } from "../../test-utils";
 
 const { Client: ConversationClient, User } =
-    jest.requireActual<{ Client: typeof ClientType; User: typeof UserType }>("@twilio/conversations");
+    jest.requireActual<{ Client: typeof ClientType; User: typeof UserType }>("twilio-chat");
 
 export class Client extends ConversationClient {
     /**
@@ -79,10 +79,12 @@ export class Client extends ConversationClient {
      * Get a known conversation by its SID.
      * @param conversationSid Conversation sid
      */
-    async getConversationBySid(conversationSid: string): Promise<Conversation> {
-        return new Conversation(
+    async getConversationBySid(conversationSid: string): Promise<Channel> {
+        return new Channel(
             {
                 channel: "chat",
+                friendlyName: "chat",
+                type: "twilsock",
                 entityName: "",
                 uniqueName: "",
                 attributes: {},
@@ -94,7 +96,8 @@ export class Client extends ConversationClient {
             {
                 self: "",
                 messages: "",
-                participants: ""
+                participants: "",
+                invites: ""
             },
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             {} as any,
@@ -107,10 +110,12 @@ export class Client extends ConversationClient {
      * Get a known conversation by its unique identifier name.
      * @param uniqueName The unique identifier name of the conversation.
      */
-    async getConversationByUniqueName(): Promise<Conversation> {
-        return new Conversation(
+    async getChannelByUniqueName(): Promise<Channel> {
+        return new Channel(
             {
                 channel: "chat",
+                friendlyName: "chat",
+                type: "twilsock",
                 entityName: "",
                 uniqueName: "",
                 attributes: {},
@@ -122,7 +127,8 @@ export class Client extends ConversationClient {
             {
                 self: "",
                 messages: "",
-                participants: ""
+                participants: "",
+                invites: ""
             },
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             {} as any,
@@ -134,7 +140,7 @@ export class Client extends ConversationClient {
     /**
      * Get the current list of all the subscribed conversations.
      */
-    async getSubscribedConversations(): Promise<MockedPaginator<Conversation>> {
+    async getSubscribedChannels(): Promise<MockedPaginator<Channel>> {
         return new MockedPaginator();
     }
 

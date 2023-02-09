@@ -1,4 +1,4 @@
-import { Media, Message, User } from "@twilio/conversations";
+import { Media, Message, User } from "twilio-chat";
 
 import { generateDuration } from "./generateDuration";
 
@@ -18,7 +18,7 @@ const getTranscriptData = (messages: Message[] | undefined, users: User[] | unde
                 author: message.author === "Concierge" ? message.author : currentUser?.friendlyName,
                 body: message.body,
                 timeStamp: message.dateCreated,
-                attachedMedia: message.attachedMedia
+                // attachedMedia: message.attachedMedia
             });
         }
     }

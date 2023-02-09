@@ -1,4 +1,4 @@
-import { Message, Conversation } from "@twilio/conversations";
+import { Message, Channel as Conversation } from "twilio-chat";
 import { applyMiddleware, combineReducers, createStore, compose } from "redux";
 import thunk from "redux-thunk";
 
@@ -22,7 +22,7 @@ import {
 } from "../actionTypes";
 import { SessionReducer } from "../../session.reducer";
 
-jest.mock("@twilio/conversations");
+jest.mock("twilio-chat");
 
 const createSessionStore = () =>
     createStore(

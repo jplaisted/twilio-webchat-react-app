@@ -1,5 +1,5 @@
 import { AnyAction } from "redux";
-import { Message, Participant, User } from "@twilio/conversations";
+import { Message, Member, User } from "twilio-chat";
 
 import { ChatReducer } from "../chat.reducer";
 import { ChatState } from "../definitions";
@@ -82,7 +82,7 @@ describe("Chat Reducer", () => {
     });
 
     it("should add a participant", () => {
-        const participant = { sid: "sid" } as Participant;
+        const participant = { sid: "sid" } as Member;
         const user = { identity: "sid" } as User;
         const reduced = ChatReducer(initialState, { type: ACTION_ADD_PARTICIPANT, payload: { participant, user } });
         expect(reduced.participants.length).toBe(1);
@@ -95,7 +95,7 @@ describe("Chat Reducer", () => {
         const participants = [
             { sid: "sid1", identity: "foo" },
             { sid: "sid2", identity: "bar" }
-        ] as Participant[];
+        ] as Member[];
         const users = [{ identity: "foo" }, { identity: "bar" }] as User[];
         const state = {
             ...initialState,
@@ -117,7 +117,7 @@ describe("Chat Reducer", () => {
         const participants = [
             { sid: "sid1", identity: "foo" },
             { sid: "sid2", identity: "bar" }
-        ] as Participant[];
+        ] as Member[];
         const updatedParticipant = { sid: "sid2", identity: "barUpdated" };
         const state = {
             ...initialState,

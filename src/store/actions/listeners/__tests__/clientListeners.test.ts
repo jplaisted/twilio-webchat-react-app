@@ -6,7 +6,7 @@ import * as genericActions from "../../genericActions";
 import { initClientListeners } from "../clientListener";
 import { Token } from "../../../../definitions";
 import { sessionDataHandler } from "../../../../sessionDataHandler";
-import { Client } from "../../../../__mocks__/@twilio/conversations/client";
+import { Client } from "../../../../__mocks__/twilio-chat/client";
 
 describe("Client Listeners", () => {
     const tokenAboutToExpireEvent = "tokenAboutToExpire";

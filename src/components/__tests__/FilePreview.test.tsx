@@ -1,6 +1,6 @@
 import { fireEvent, render } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { Media } from "@twilio/conversations";
+import { Media } from "twilio-chat";
 
 import { FilePreview } from "../FilePreview";
 import * as genericActions from "../../store/actions/genericActions";

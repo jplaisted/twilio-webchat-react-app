@@ -1,10 +1,10 @@
-import { Conversation, Participant } from "@twilio/conversations";
+import { Channel, Member } from "twilio-chat";
 import { Dispatch } from "redux";
 
 import { ACTION_ADD_PARTICIPANT, ACTION_REMOVE_PARTICIPANT, ACTION_UPDATE_PARTICIPANT } from "../actionTypes";
 
-export const initParticipantsListener = (conversation: Conversation, dispatch: Dispatch) => {
-    conversation.addListener("participantJoined", async (participant: Participant) => {
+export const initParticipantsListener = (conversation: Channel, dispatch: Dispatch) => {
+    conversation.addListener("memberJoined", async (participant: Member) => {
         const user = await participant.getUser();
         dispatch({
             type: ACTION_ADD_PARTICIPANT,
@@ -12,20 +12,20 @@ export const initParticipantsListener = (conversation: Conversation, dispatch: D
         });
     });
 
-    conversation.addListener("participantLeft", (participant: Participant) => {
+    conversation.addListener("memberLeft", (participant: Member) => {
         dispatch({
             type: ACTION_REMOVE_PARTICIPANT,
             payload: { participant }
         });
     });
 
-    const dispatchParticipantUpdate = (participant: Participant) => {
+    const dispatchParticipantUpdate = (participant: Member) => {
         dispatch({
             type: ACTION_UPDATE_PARTICIPANT,
             payload: { participant }
         });
     };
-    conversation.addListener("participantUpdated", ({ participant }) => dispatchParticipantUpdate(participant));
+    conversation.addListener("memberUpdated", ({ member }) => dispatchParticipantUpdate(member));
     conversation.addListener("typingStarted", dispatchParticipantUpdate);
     conversation.addListener("typingEnded", dispatchParticipantUpdate);
 };

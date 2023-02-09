@@ -7,29 +7,17 @@ const { logFinalAction, logInitialAction, logInterimAction } = require("../helpe
 const contactWebchatOrchestrator = async (request, customerFriendlyName) => {
     logInterimAction("Calling Webchat Orchestrator");
 
-    const params = new URLSearchParams();
-    params.append("AddressSid", process.env.ADDRESS_SID);
-    params.append("ChatFriendlyName", "Webchat widget");
-    params.append("CustomerFriendlyName", customerFriendlyName);
-    params.append(
-        "PreEngagementData",
-        JSON.stringify({
-            ...request.body?.formData,
-            friendlyName: customerFriendlyName
-        })
-    );
-
     let conversationSid;
-    let identity;
+    let identity = customerFriendlyName + "-" + Date.now();
 
     try {
-        const res = await axios.post(`https://flex-api.twilio.com/v2/WebChats`, params, {
-            auth: {
-                username: process.env.ACCOUNT_SID,
-                password: process.env.AUTH_TOKEN
-            }
+        const conversation = await getTwilioClient().flexApi.v1.channel.create({
+            flexFlowSid: process.env.FLEX_FLOW_SID,
+            identity: identity,
+            chatUserFriendlyName: customerFriendlyName,
+            chatFriendlyName: "Live Chat",
         });
-        ({ identity, conversation_sid: conversationSid } = res.data);
+        conversationSid = conversation.sid;
     } catch (e) {
         logInterimAction("Something went wrong during the orchestration:", e.response?.data?.message);
         throw e.response.data;

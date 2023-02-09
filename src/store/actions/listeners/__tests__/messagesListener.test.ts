@@ -1,6 +1,6 @@
-import { Message } from "@twilio/conversations";
+import { Message } from "twilio-chat";
 
-import { Conversation } from "../../../../__mocks__/@twilio/conversations/conversation";
+import { Channel as Conversation } from "../../../../__mocks__/twilio-chat/channel";
 import { initMessagesListener } from "../messagesListener";
 import { ACTION_ADD_MESSAGE, ACTION_REMOVE_MESSAGE, ACTION_UPDATE_MESSAGE } from "../../actionTypes";
 

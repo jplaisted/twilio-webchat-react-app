@@ -1,4 +1,4 @@
-import { Client } from "@twilio/conversations";
+import { Client } from "twilio-chat";
 import { Dispatch } from "redux";
 import log from "loglevel";
 
@@ -30,20 +30,26 @@ export function initSession({ token, conversationSid }: { token: string; convers
         try {
             conversationsClient = await Client.create(token);
             try {
-                conversation = await conversationsClient.getConversationBySid(conversationSid);
+                conversation = await conversationsClient.getChannelBySid(conversationSid);
             } catch (e) {
                 dispatch(addNotification(notifications.failedToInitSessionNotification("Couldn't load conversation")));
                 dispatch(changeEngagementPhase({ phase: EngagementPhase.PreEngagementForm }));
                 return;
             }
 
-            participants = await conversation.getParticipants();
+            participants = await conversation.getMembers();
             users = await Promise.all(participants.map(async (p) => p.getUser()));
             messages = (await conversation.getMessages(MESSAGES_LOAD_COUNT)).items;
         } catch (e) {
             log.error("Something went wrong when initializing session", e);
             throw e;
         }
+
+        const cs = (conversation.attributes as any)?.status?.toLowerCase();
+
+        console.log(conversation);
+        console.log(conversation.state);
+        console.log(`wtf is the state 000 ${cs}`);
 
         dispatch({
             type: ACTION_START_SESSION,
@@ -55,7 +61,8 @@ export function initSession({ token, conversationSid }: { token: string; convers
                 users,
                 participants,
                 messages,
-                conversationState: conversation.state?.current,
+                /* eslint-disable  @typescript-eslint/no-explicit-any */
+                conversationState: cs,
                 currentPhase: EngagementPhase.MessagingCanvas
             }
         });

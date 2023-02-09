@@ -1,4 +1,4 @@
-import { Message, User } from "@twilio/conversations";
+import { Message, User } from "twilio-chat";
 import { useState } from "react";
 import log from "loglevel";
 import { Box } from "@twilio-paste/core/box";
@@ -36,21 +36,19 @@ export const Transcript = (props: TranscriptProps) => {
     const [isEmailingTranscript, setEmailingTranscript] = useState(false);
 
     const getMediaInfo = async () => {
-        const mediaMessages = props.messages?.filter((message) => message.attachedMedia);
+        const mediaMessages = props.messages?.filter((message) => message.media);
         const mediaInfo = [];
-        for (const message of mediaMessages || []) {
-            for (const media of message.attachedMedia || []) {
-                try {
-                    const file = {
-                        name: media.filename,
-                        type: media.contentType,
-                        size: media.size
-                    } as File;
-                    const url = media ? await media.getContentTemporaryUrl() : URL.createObjectURL(file);
-                    mediaInfo.push({ url, filename: media.filename, type: media.contentType });
-                } catch (e) {
-                    log.error(`Failed downloading message attachment: ${e}`);
-                }
+        for (const { media } of mediaMessages || []) {
+            try {
+                const file = {
+                    name: media.filename,
+                    type: media.contentType,
+                    size: media.size
+                } as File;
+                const url = media ? await media.getContentTemporaryUrl() : URL.createObjectURL(file);
+                mediaInfo.push({ url, filename: media.filename, type: media.contentType });
+            } catch (e) {
+                log.error(`Failed downloading message attachment: ${e}`);
             }
         }
         return mediaInfo;

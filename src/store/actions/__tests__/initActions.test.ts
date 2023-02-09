@@ -1,4 +1,4 @@
-import { Client, Message, Conversation } from "@twilio/conversations";
+import { Client, Message, Channel as Conversation } from "twilio-chat";
 import { applyMiddleware, combineReducers, createStore, compose } from "redux";
 import thunk from "redux-thunk";
 
@@ -18,7 +18,7 @@ import { initParticipantsListener } from "../listeners/participantsListener";
 import { SessionReducer } from "../../session.reducer";
 import { notifications } from "../../../notifications";
 
-jest.mock("@twilio/conversations");
+jest.mock("twilio-chat");
 jest.mock("../listeners/clientListener", () => ({
     initClientListeners: jest.fn()
 }));
@@ -48,11 +48,11 @@ describe("Actions", () => {
     const participants = [{ getUser: () => users[0] }];
     const conversation = {
         state: { current: "active" },
-        getParticipants: () => participants,
+        getMembers: () => participants,
         getMessages: () => new MockedPaginator(messages)
     } as unknown as Conversation;
     const conversationsClient = {
-        getConversationBySid: () => conversation
+        getChannelBySid: () => conversation
     } as unknown as Client;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -19,6 +19,7 @@ export const MessagingCanvasPhase = () => {
         dispatch(removeNotification(notifications.failedToInitSessionNotification("ds").id));
     }, [dispatch]);
 
+    console.log(`wtf is the state ${conversationState}`);
     const Wrapper = conversationState === "active" ? AttachFileDropArea : Fragment;
 
     return (

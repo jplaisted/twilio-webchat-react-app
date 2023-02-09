@@ -1,11 +1,11 @@
-import { Media, Message } from "@twilio/conversations";
+import { Message } from "twilio-chat";
 import { Box } from "@twilio-paste/core/box";
 import { ScreenReaderOnly } from "@twilio-paste/core/screen-reader-only";
 import { useSelector } from "react-redux";
 import { Text } from "@twilio-paste/core/text";
 import { Flex } from "@twilio-paste/core/flex";
 import { UserIcon } from "@twilio-paste/icons/esm/UserIcon";
-import { Key, KeyboardEvent, useEffect, useRef, useState } from "react";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { SuccessIcon } from "@twilio-paste/icons/esm/SuccessIcon";
 
 import { AppState } from "../store/definitions";
@@ -54,7 +54,7 @@ export const MessageBubble = ({
             const getOtherParticipants = participants.filter((p) => p.identity !== conversationsClient?.user.identity);
             setRead(
                 Boolean(getOtherParticipants.length) &&
-                    getOtherParticipants.every((p) => p.lastReadMessageIndex === message.index)
+                    getOtherParticipants.every((p) => p.lastConsumedMessageIndex === message.index)
             );
         } else {
             setRead(false);
@@ -69,18 +69,18 @@ export const MessageBubble = ({
 
     const renderMedia = () => {
         if (fileAttachmentConfig?.enabled) {
-            if (!message.attachedMedia) {
+            if (!message.media) {
                 return null;
             }
 
-            return message.attachedMedia.map((media: Media, index: Key) => {
-                const file = {
-                    name: media.filename,
-                    type: media.contentType,
-                    size: media.size
-                } as File;
-                return <FilePreview key={index} file={file} isBubble={true} media={media} focusable={focusable} />;
-            });
+            const { media } = message;
+
+            const file = {
+                name: media.filename,
+                type: media.contentType,
+                size: media.size
+            } as File;
+            return <FilePreview key={0} file={file} isBubble={true} media={media} focusable={focusable} />;
         }
 
         return <i>Media messages are not supported</i>;

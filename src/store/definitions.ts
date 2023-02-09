@@ -1,4 +1,4 @@
-import { Client, Conversation, Participant, Message, User } from "@twilio/conversations";
+import { Client, Channel, Member, Message, User } from "twilio-chat";
 import { GenericThemeShape } from "@twilio-paste/theme";
 import { AlertVariants } from "@twilio-paste/core/alert";
 
@@ -12,8 +12,8 @@ export enum EngagementPhase {
 
 export type ChatState = {
     conversationsClient?: Client;
-    conversation?: Conversation;
-    participants?: Participant[];
+    conversation?: Channel;
+    participants?: Member[];
     users?: User[];
     messages?: Message[];
     attachedFiles?: File[];
@@ -28,9 +28,9 @@ export type SessionState = {
     token?: string;
     conversationSid?: string;
     conversationsClient?: Client;
-    conversation?: Conversation;
+    conversation?: Channel;
     users?: User[];
-    participants?: Participant[];
+    participants?: Member[];
     messages?: Message[];
     conversationState?: "active" | "inactive" | "closed";
     preEngagementData?: PreEngagementData;

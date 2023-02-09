@@ -1,5 +1,5 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-import { Media, Message, User } from "@twilio/conversations";
+import { Media, Message, User } from "twilio-chat";
 
 import {
     Transcript,

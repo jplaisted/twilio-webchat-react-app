@@ -2,43 +2,24 @@
 
 import type {
     Message,
-    MessageBuilder,
     NotificationLevel,
-    Participant,
-    ParticipantBindingOptions,
-    SendEmailOptions,
+    Member,
     SendMediaOptions,
-    Conversation as ConversationType
-} from "@twilio/conversations";
+    Channel as ChannelType
+} from "twilio-chat";
 
-import { MockedPaginator } from "../../../test-utils";
+import { MockedPaginator } from "../../test-utils";
 
-const { Conversation: OriginalConversation } =
-    jest.requireActual<{ Conversation: typeof ConversationType }>("@twilio/conversations");
+const { Channel: OriginalChannel } =
+    jest.requireActual<{ Channel: typeof ChannelType }>("twilio-chat");
 
-export class Conversation extends OriginalConversation {
+export class Channel extends OriginalChannel {
     /**
      * Add a participant to the conversation by its identity.
      * @param identity Identity of the Client to add.
      * @param attributes Attributes to be attached to the participant.
      */
     async add(identity: string, attributes?: Record<string, unknown>): Promise<void> {
-        return Promise.resolve();
-    }
-
-    /**
-     * Add a non-chat participant to the conversation.
-     * @param proxyAddress Proxy (Twilio) address of the participant.
-     * @param address User address of the participant.
-     * @param attributes Attributes to be attached to the participant.
-     * @param bindingOptions Options for adding email participants - name and CC/To level.
-     */
-    async addNonChatParticipant(
-        proxyAddress: string,
-        address: string,
-        attributes?: Record<string, unknown>,
-        bindingOptions?: ParticipantBindingOptions
-    ): Promise<void> {
         return Promise.resolve();
     }
 
@@ -56,8 +37,8 @@ export class Conversation extends OriginalConversation {
     /**
      * Delete the conversation and unsubscribe from its events.
      */
-    async delete(): Promise<Conversation> {
-        return this as unknown as Conversation;
+    async delete(): Promise<Channel> {
+        return this as unknown as Channel;
     }
 
     /**
@@ -86,7 +67,7 @@ export class Conversation extends OriginalConversation {
     /**
      * Get a list of all the participants who are joined to this conversation.
      */
-    async getParticipants(): Promise<Participant[]> {
+    async getMembers(): Promise<Member[]> {
         return Promise.resolve([]);
     }
 
@@ -100,24 +81,24 @@ export class Conversation extends OriginalConversation {
      * This is useful for any UI badges, but it is not recommended to build any core application
      * logic based on these counters being accurate in real time.
      */
-    async getParticipantsCount(): Promise<number> {
-        return (await this.getParticipants()).length;
+    async getMemberCount(): Promise<number> {
+        return (await this.getMembers()).length;
     }
 
     /**
      * Get a participant by its SID.
      * @param participantSid Participant SID.
      */
-    async getParticipantBySid(participantSid: string): Promise<Participant> {
-        return Promise.resolve({} as Participant);
+    async getMemberBySid(participantSid: string): Promise<Member> {
+        return Promise.resolve({} as Member);
     }
 
     /**
      * Get a participant by its identity.
      * @param identity Participant identity.
      */
-    async getParticipantByIdentity(identity: string): Promise<Participant> {
-        return Promise.resolve({} as Participant);
+    async getMemberByIdentity(identity: string): Promise<Member> {
+        return Promise.resolve({} as Member);
     }
 
     /**
@@ -156,14 +137,14 @@ export class Conversation extends OriginalConversation {
     /**
      * Join the conversation and subscribe to its events.
      */
-    async join(): Promise<Conversation> {
+    async join(): Promise<Channel> {
         return this;
     }
 
     /**
      * Leave the conversation.
      */
-    async leave(): Promise<Conversation> {
+    async leave(): Promise<Channel> {
         return this;
     }
 
@@ -172,7 +153,7 @@ export class Conversation extends OriginalConversation {
      * argument, it will assume that the string is an identity or SID.
      * @param participant Identity, SID or the participant object to remove.
      */
-    async removeParticipant(participant: string | Participant): Promise<void> {
+    async removeMember(participant: string | Member): Promise<void> {
         return Promise.resolve();
     }
 
@@ -187,18 +168,8 @@ export class Conversation extends OriginalConversation {
     async sendMessage(
         message: string | FormData | SendMediaOptions | null,
         messageAttributes?: Record<string, unknown>,
-        emailOptions?: SendEmailOptions
     ): Promise<number> {
         return Promise.resolve(1);
-    }
-
-    /**
-     * New interface to prepare for sending a message.
-     * Use instead of `sendMessage`.
-     * @return A MessageBuilder to help set all message sending options.
-     */
-    prepareMessage(): MessageBuilder {
-        return {} as MessageBuilder;
     }
 
     /**
@@ -237,7 +208,7 @@ export class Conversation extends OriginalConversation {
      * Update the attributes of the conversation.
      * @param attributes New attributes.
      */
-    async updateAttributes(attributes: Record<string, unknown>): Promise<Conversation> {
+    async updateAttributes(attributes: Record<string, unknown>): Promise<Channel> {
         return this;
     }
 
@@ -245,7 +216,7 @@ export class Conversation extends OriginalConversation {
      * Update the friendly name of the conversation.
      * @param friendlyName New friendly name.
      */
-    async updateFriendlyName(friendlyName: string): Promise<Conversation> {
+    async updateFriendlyName(friendlyName: string): Promise<Channel> {
         return this;
     }
 
@@ -263,7 +234,7 @@ export class Conversation extends OriginalConversation {
      * Update the unique name of the conversation.
      * @param uniqueName New unique name for the conversation. Setting unique name to null removes it.
      */
-    async updateUniqueName(uniqueName: string | null): Promise<Conversation> {
+    async updateUniqueName(uniqueName: string | null): Promise<Channel> {
         return this;
     }
 
@@ -274,24 +245,5 @@ export class Conversation extends OriginalConversation {
      */
     async _subscribe(): Promise<unknown> {
         return Promise.resolve({});
-    }
-
-    /**
-     * Load the attributes of this conversation and instantiate its participants and messages.
-     * This or _subscribe will need to be called before any events on the conversation will fire.
-     * This will need to be called before any events on participants or messages will fire
-     * @internal
-     */
-    async _subscribeStreams(): Promise<void> {
-        return Promise.resolve();
-    }
-
-    /**
-     * Stop listening for and firing events on this conversation.
-     * @internal
-     */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async _unsubscribe(): Promise<[void, any]> {
-        return Promise.resolve([, undefined]);
     }
 }

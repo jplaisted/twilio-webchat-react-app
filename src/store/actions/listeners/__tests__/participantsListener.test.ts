@@ -1,7 +1,7 @@
-import { Participant, ParticipantUpdateReason, User } from "@twilio/conversations";
+import { Member as Participant, MemberUpdateReason as ParticipantUpdateReason, User } from "twilio-chat";
 import { waitFor } from "@testing-library/react";
 
-import { Conversation } from "../../../../__mocks__/@twilio/conversations/conversation";
+import { Channel as Conversation } from "../../../../__mocks__/twilio-chat/channel";
 import { initParticipantsListener } from "../participantsListener";
 import { ACTION_ADD_PARTICIPANT, ACTION_REMOVE_PARTICIPANT, ACTION_UPDATE_PARTICIPANT } from "../../actionTypes";
 
@@ -27,6 +27,8 @@ describe("initParticipantsListener", () => {
         conversation = new Conversation(
             {
                 channel: "chat",
+                friendlyName: "chat",
+                type: "web",
                 entityName: "",
                 uniqueName: "",
                 attributes: {},
@@ -51,12 +53,12 @@ describe("initParticipantsListener", () => {
         conversation.removeAllListeners();
     });
 
-    it('adds a listener for the "participantJoined" event', async () => {
+    it('adds a listener for the "memberJoined" event', async () => {
         const dispatch = jest.fn();
 
         initParticipantsListener(conversation, dispatch);
         const getUserSpy = jest.spyOn(participant, "getUser");
-        conversation.emit("participantJoined", participant);
+        conversation.emit("memberJoined", participant);
         await waitFor(() => {
             expect(getUserSpy).toHaveBeenCalled();
         });
@@ -67,11 +69,11 @@ describe("initParticipantsListener", () => {
         });
     });
 
-    it('adds a listener for the "participantLeft" event', () => {
+    it('adds a listener for the "memberLeft" event', () => {
         const dispatch = jest.fn();
 
         initParticipantsListener(conversation, dispatch);
-        conversation.emit("participantLeft", participant);
+        conversation.emit("memberLeft", participant);
         expect(dispatch).toHaveBeenCalledTimes(1);
         expect(dispatch).toHaveBeenCalledWith({
             type: ACTION_REMOVE_PARTICIPANT,
@@ -79,12 +81,12 @@ describe("initParticipantsListener", () => {
         });
     });
 
-    it('adds a listener for the "participantUpdated" event subset', () => {
+    it('adds a listener for the "memberUpdated" event subset', () => {
         const dispatch = jest.fn();
 
         initParticipantsListener(conversation, dispatch);
-        conversation.emit("participantUpdated", {
-            participant,
+        conversation.emit("memberUpdated", {
+            member: participant,
             updateReasons: ["dateUpdated"] as ParticipantUpdateReason[]
         });
         expect(dispatch).toHaveBeenCalledTimes(1);

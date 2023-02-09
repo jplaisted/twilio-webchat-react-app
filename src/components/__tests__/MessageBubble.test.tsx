@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { Media, Message } from "@twilio/conversations";
+import { Media, Message } from "twilio-chat";
 import { useSelector } from "react-redux";
 
 import { MessageBubble } from "../MessageBubble";

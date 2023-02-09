@@ -40,8 +40,8 @@ export const MessageInput = () => {
                 conversation?.typing();
 
                 // in case the input was already focused, let's make sure to send the `read` status if the customer is typing
-                if (conversation?.lastReadMessageIndex !== conversation?.lastMessage?.index) {
-                    conversation?.setAllMessagesRead();
+                if (conversation?.lastConsumedMessageIndex !== conversation?.lastMessage?.index) {
+                    conversation?.setAllMessagesConsumed();
                 }
             }, 500),
         [conversation]
@@ -59,14 +59,13 @@ export const MessageInput = () => {
         }
         setIsSending(true);
 
-        let preparedMessage = conversation.prepareMessage();
-        preparedMessage = preparedMessage.setBody(text);
+        conversation.sendMessage(text);
+
         attachedFiles.forEach((file: File) => {
             const formData = new FormData();
             formData.append(file.name, file);
-            preparedMessage.addMedia(formData);
+            conversation.sendMessage(formData);
         });
-        await preparedMessage.build().send();
         setText("");
         dispatch(detachFiles(attachedFiles));
         setIsSending(false);
@@ -89,7 +88,7 @@ export const MessageInput = () => {
     };
 
     const onFocus = () => {
-        conversation?.setAllMessagesRead();
+        conversation?.setAllMessagesConsumed();
     };
 
     useEffect(() => {

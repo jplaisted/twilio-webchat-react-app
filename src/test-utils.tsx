@@ -1,5 +1,3 @@
-import type * as Conversations from "@twilio/conversations";
-
 import type { Notification } from "./store/definitions";
 
 /*
@@ -15,7 +13,7 @@ export const matchPartialNotificationObject = (expectedNotification: Notificatio
 
 export * from "@testing-library/react";
 
-export class MockedPaginator<T> implements Conversations.Paginator<T> {
+export class MockedPaginator<T> {
     /**
      * Indicates the existence of the next page.
      */

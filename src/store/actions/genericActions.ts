@@ -1,5 +1,5 @@
 import { Dispatch } from "redux";
-import { Conversation } from "@twilio/conversations";
+import { Channel } from "twilio-chat";
 
 import { EngagementPhase, Notification, PreEngagementData } from "../definitions";
 import {
@@ -41,7 +41,7 @@ export function removeNotification(id: string) {
     };
 }
 
-export function getMoreMessages({ anchor, conversation }: { anchor: number; conversation: Conversation }) {
+export function getMoreMessages({ anchor, conversation }: { anchor: number; conversation: Channel }) {
     return async (dispatch: Dispatch) =>
         dispatch({
             type: ACTION_ADD_MULTIPLE_MESSAGES,
